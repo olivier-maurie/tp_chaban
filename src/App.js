@@ -8,6 +8,7 @@ import {
 
 import HomePage from './pages/home';
 import SinglePage from './pages/single';
+import error404Page from './pages/404';
 
 class App extends Component {
 
@@ -20,6 +21,7 @@ class App extends Component {
       <Router>
         <div>
           <Route path="/:id" component={SinglePage} />
+          <Route path="/404" component={error404Page}/>
           <Route exact path="/" component={HomePage} />
         </div>
       </Router>

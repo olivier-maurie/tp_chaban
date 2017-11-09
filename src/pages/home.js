@@ -11,13 +11,29 @@ class HomePage extends Component {
       data: null,
     }
   }
-
+0
   componentDidMount() {
 
     // Get data from API
     fetch('http://localhost:1337')
       // parse response
-      .then((res) => res.json())
+    .then((res, next) => {
+      console.log(res)
+      if(res.ok){
+        console.log("Connexion à l'API réussie")
+        return res.json()
+      }
+      else{
+        console.log('Connexion à l\'API impossible')
+        next()
+      }
+    
+    }).catch((err) => {
+      if(err){
+        alert("Erreur 500 : impossible de se connecter")
+      }
+    })
+     
       // use parsed response
       .then((json) => {
         this.setState({
