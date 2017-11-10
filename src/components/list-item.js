@@ -1,34 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Card } from 'react-materialize';
+import { Card, Icon } from 'react-materialize';
 
 import { Link } from 'react-router-dom';
 
 class ListItem extends Component {
 
-  static propTypes = {
-    item: PropTypes.shape({
-      date: PropTypes.string.isRequired,
-    }).isRequired,
-  }
+    static propTypes = {
+        item: PropTypes.shape({
+            date: PropTypes.string.isRequired,
+        }).isRequired,
+    };
 
-  render() {
-    const { item } = this.props;
+    render() {
+        const { item } = this.props;
 
-    return (
-      <Card title={item.date} >
-
-
-
-
-        <Link
-          to={`/${item.id}`}
-        >
-          Voir plus de détails
-        </Link>
-      </Card>
-    );
-  }
+        return (
+            <Card title={item.date}>
+                <Link to={`/${item.id}`} >
+                    Voir plus de détails
+                    <Icon right>chevron_right</Icon>
+                </Link>
+            </Card>
+        );
+    }
 
 }
 

@@ -1,68 +1,89 @@
 import React, { Component } from 'react';
-import List from './../components/list';
+import { Redirect } from 'react-router-dom';
+import moment from 'moment';
+
+import List from '../components/list';
+import Search from '../components/search';
 import { ProgressBar } from 'react-materialize';
-import { Link} from 'react-router-dom'
+
+let errorCode = null;
+
 class HomePage extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      data: null,
+    constructor(props){
+        super(props);
+        this.state= ({
+            getUrl: 'http://localhost:1337',
+            from: "",
+            to: ""
+        })
     }
-  }
-0
-  componentDidMount() {
 
-    // Get data from API
-    fetch('http://localhost:1337')
-      // parse response
-    .then((res, next) => {
-      console.log(res)
-      if(res.ok){
-        console.log("Connexion à l'API réussie")
-        return res.json()
-      }
-      else{
-        console.log('Connexion à l\'API impossible')
-        next()
-      }
-    
-    }).catch((err) => {
-      if(err){
-        alert("Erreur 500 : impossible de se connecter")
-      }
-    })
-     
-      // use parsed response
-      .then((json) => {
+    handleSubmit = (e) => {
+        let fromValue = moment(this.props.from).format("L");
+        let toValue = moment(this.props.to).format("L");
         this.setState({
-          data: json,
+            from: fromValue,
+            to: toValue,
         });
-      });
-  }
+        console.log(this.state);
+    }
 
-  render() {
+    getSearchDatas = (url) => {
+        // Get data from API
+        fetch(url)
+        // parse response
+            .then((res, next) => {
+                console.log(this.props.match);
+                if (res.ok) {
+                    console.log("Connexion à l'API réussie");
+                    return res.json();
+                } else {
+                    errorCode = res.status;
+                    next();
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                if (errorCode === 400) {
+                    alert("Erreur 400 : Un problème est survenu");
+                } else if (errorCode === 404) {
+                    alert("Erreur 404 : Page introuvable");
+                    this.setState({ redirect: (<Redirect to="/page/not-found"/>) });
+                } else if (errorCode === 500) {
+                    alert("Erreur 500 : erreur serveur");
+                }
+            })
 
-    const { data } = this.state;
+            // use parsed response
+            .then((json) => {
+                this.setState({
+                    data: json,
+                });
+            });
+    }
 
-    return (
-      <div>
+    componentDidMount() {
+        this.getSearchDatas(this.state.getUrl);
+    }
 
-        <h2> HomePage </h2>
+    render() {
+        const { data } = this.state;
 
+        return (
+            <div className="container">
+                <h1> HomePage </h1>
+                <Search handleSubmit={this.handleSubmit} from={this.props.from} to={this.props.to}/>
+                {!data ? (
+                    <ProgressBar />
+                ) : (
+                    <div className="row">
 
-
-        {!data ? (
-          <ProgressBar />
-        ) : (
-          <div>
-            <List data={data} />
-          </div>
-        )}
-      </div>
-    );
-  }
+                        <List data={data} />
+                    </div>
+                )}
+            </div>
+        );
+    }
 
 }
 

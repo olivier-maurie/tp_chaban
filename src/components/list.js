@@ -11,7 +11,6 @@ class List extends Component {
   render() {
     return (
       <div>
-
         {this.props.data.map((item) => {
           return <ListItem
             key={item.id}

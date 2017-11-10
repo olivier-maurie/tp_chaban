@@ -1,5 +1,13 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+/*body {*/
+  /*margin: 0;*/
+  /*padding: 0;*/
+  /*font-family: sans-serif;*/
+/*}*/
+
+/*.card > .card-content > div > a{*/
+  /*color: white;*/
+/*}*/
+
+.btn a, .info a{
+  color: #fff;
 }
